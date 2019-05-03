@@ -1,0 +1,11 @@
+__history/
+*.dsk
+*.local
+*.identcache
+*.dcu
+*.stat
+*.drc
+*.map
+*.rsm
+*.stat
+Nathan.ObjectMapping.UnitTestX/bin/Win32/Debug/TestInsightSettings.ini
