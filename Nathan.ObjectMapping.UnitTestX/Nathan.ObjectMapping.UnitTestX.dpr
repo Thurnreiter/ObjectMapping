@@ -14,7 +14,11 @@ uses
   DUnitX.Loggers.Console,
   DUnitX.Loggers.Xml.NUnit,
   Nathan.ObjectMapping.NamingConvention in '..\Nathan.ObjectMapping.NamingConvention.pas',
-  Test.NamingConvention in 'Test.NamingConvention.pas';
+  Test.NamingConvention in 'Test.NamingConvention.pas',
+  Test.Order.ObjectMapping.Config in 'Test.Order.ObjectMapping.Config.pas',
+  Test.Order.ObjectMapping in 'Test.Order.ObjectMapping.pas',
+  Nathan.ObjectMapping.Types in '..\Nathan.ObjectMapping.Types.pas',
+  Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas';
 
 var
   Runner: ITestRunner;

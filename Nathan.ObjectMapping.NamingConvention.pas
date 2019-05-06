@@ -2,6 +2,9 @@ unit Nathan.ObjectMapping.NamingConvention;
 
 interface
 
+uses
+  System.SysUtils;
+
 {$M+}
 
 type
@@ -38,12 +41,19 @@ type
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  TOwnFuncNamingConvention = class(TNamingConventionDecorator)
+  strict private
+    FOwnFunc: TFunc<string, string>;
+  public
+    constructor Create(ANamingConvention: INamingConvention; AOwnFunc: TFunc<string, string>); overload;
+    function GenerateKeyName(const AValue: string): string; override;
+  end;
+
 {$M-}
 
 implementation
 
 uses
-  System.SysUtils,
   System.StrUtils;
 
 { **************************************************************************** }
@@ -78,10 +88,7 @@ end;
 
 function TPrefixFNamingConvention.GenerateKeyName(const AValue: string): string;
 begin
-  if AValue.IsEmpty then
-    Exit(string.empty);
-
-  Result := IfThen(AValue.ToLower.StartsWith('f'), AValue.Substring(1), AValue);
+  Result := inherited GenerateKeyName(IfThen(AValue.ToLower.StartsWith('f'), AValue.Substring(1), AValue))
 end;
 
 { **************************************************************************** }
@@ -113,6 +120,21 @@ begin
     AValue
       .Replace('set', '', [rfIgnoreCase])
       .Replace('get', '', [rfIgnoreCase]))
+end;
+
+{ **************************************************************************** }
+
+{ TOwnFuncNamingConvention }
+
+constructor TOwnFuncNamingConvention.Create(ANamingConvention: INamingConvention; AOwnFunc: TFunc<string, string>);
+begin
+  inherited Create(ANamingConvention);
+  FOwnFunc := AOwnFunc;
+end;
+
+function TOwnFuncNamingConvention.GenerateKeyName(const AValue: string): string;
+begin
+  Result := inherited GenerateKeyName(FOwnFunc(AValue))
 end;
 
 end.

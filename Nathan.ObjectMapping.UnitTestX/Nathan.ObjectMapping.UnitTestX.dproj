@@ -52,7 +52,7 @@
         <VerInfo_Locale>2055</VerInfo_Locale>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <UsingDelphiRTL>true</UsingDelphiRTL>
-        <DCC_UnitSearchPath>..\;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\;..\..\GeneralStuff\Thurnreiter.Lib;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;System;Xml;Data;Datasnap;Web;Soap;Spring;IBX;Winapi;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <DCC_Define>$(Config);$(DCC_Define)</DCC_Define>
         <DCC_DcpOutput>.\dcp\$(Platform)\$(Config)</DCC_DcpOutput>
@@ -98,6 +98,10 @@
         </DelphiCompile>
         <DCCReference Include="..\Nathan.ObjectMapping.NamingConvention.pas"/>
         <DCCReference Include="Test.NamingConvention.pas"/>
+        <DCCReference Include="Test.Order.ObjectMapping.Config.pas"/>
+        <DCCReference Include="Test.Order.ObjectMapping.pas"/>
+        <DCCReference Include="..\Nathan.ObjectMapping.Types.pas"/>
+        <DCCReference Include="..\Nathan.ObjectMapping.Config.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

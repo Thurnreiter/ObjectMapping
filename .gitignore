@@ -9,3 +9,5 @@ __history/
 *.rsm
 *.stat
 Nathan.ObjectMapping.UnitTestX/bin/Win32/Debug/TestInsightSettings.ini
+*.exe
+*.stat

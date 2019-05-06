@@ -1,0 +1,4 @@
+[submodule "Lib/Thurnreiter"]
+	path = Lib/Thurnreiter
+	url = https://github.com/Thurnreiter/GeneralStuff.git
+	branch = master
