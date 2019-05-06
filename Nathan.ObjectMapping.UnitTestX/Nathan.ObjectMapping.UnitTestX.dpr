@@ -18,7 +18,8 @@ uses
   Test.Order.ObjectMapping.Config in 'Test.Order.ObjectMapping.Config.pas',
   Test.Order.ObjectMapping in 'Test.Order.ObjectMapping.pas',
   Nathan.ObjectMapping.Types in '..\Nathan.ObjectMapping.Types.pas',
-  Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas';
+  Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas',
+  Nathan.ObjectMapping.Core in '..\Nathan.ObjectMapping.Core.pas';
 
 var
   Runner: ITestRunner;

@@ -15,11 +15,13 @@ uses
 type
   INathanObjectMappingConfig<S, D> = interface
     ['{9D498376-8130-4E82-AA98-066CA9833685}']
+    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
+
+    function Clean(): INathanObjectMappingConfig<S, D>; overload;
+
     function NamingConvention(): INamingConvention; overload;
     function NamingConvention(AValue: INamingConvention): INathanObjectMappingConfig<S, D>; overload;
     function NamingConvention(AValue: TFunc<INamingConvention>): INathanObjectMappingConfig<S, D>; overload;
-
-    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
 
     function CreateMap(): TDictionary<string, TMappedSrcDest>;
   end;
@@ -38,11 +40,13 @@ type
     constructor Create(); overload;
     destructor Destroy; override;
 
+    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
+
     function NamingConvention(): INamingConvention; overload;
     function NamingConvention(AValue: INamingConvention): INathanObjectMappingConfig<S, D>; overload;
     function NamingConvention(AValue: TFunc<INamingConvention>): INathanObjectMappingConfig<S, D>; overload;
 
-    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
+    function Clean(): INathanObjectMappingConfig<S, D>; overload;
 
     function CreateMap(): TDictionary<string, TMappedSrcDest>;
   end;
@@ -54,7 +58,7 @@ implementation
 uses
   System.Types,
   System.TypInfo,
-  Nathan.TArrayHelper;  //  Comes from "https://github.com/Thurnreiter/GeneralStuff/blob/master/Thurnreiter.Lib/ArrayHelper.pas"
+  Nathan.TArrayHelper;
 
 { TNathanObjectMappingConfig<S, D> }
 
@@ -123,6 +127,14 @@ begin
   end;
 end;
 
+function TNathanObjectMappingConfig<S, D>.Clean: INathanObjectMappingConfig<S, D>;
+begin
+  FDict.Clear;
+  TArray.Clear<TCoreMapDetails>(FListOfPropNameSource);
+  TArray.Clear<TCoreMapDetails>(FListOfPropNameDestination);
+  Result := Self;
+end;
+
 procedure TNathanObjectMappingConfig<S, D>.Collate(ASrc, ADest: TArray<TCoreMapDetails>; ANamingConvention: INamingConvention);
 var
   Mapped: TMappedSrcDest;
@@ -151,6 +163,11 @@ var
   RTypeS: TRttiType;
   RTypeD: TRttiType;
 begin
+  //  We assume it's all been done before...
+  if (High(FListOfPropNameSource) > -1)
+  or (High(FListOfPropNameDestination) > -1) then
+    Exit(FDict);
+
   RTypeS := TRTTIContext.Create.GetType(TypeInfo(S)); //  RTypeS := TRTTIContext.Create.GetType(ASource.ClassType);
   RTypeD := TRTTIContext.Create.GetType(TypeInfo(D));
 

@@ -28,6 +28,9 @@ type
     procedure Test_ToLower;
 
     [Test]
+    procedure Test_OwnFunction;
+
+    [Test]
     [TestCase('Getter', 'GetAnyVariableName,AnyVariableName')]
     [TestCase('Setter', 'SetAnyVariableName,AnyVariableName')]
     procedure Test_GetterSetter(const AValue, AExpected: string);
@@ -88,6 +91,25 @@ begin
 
   //  Assert...
   Assert.AreEqual('anyvariablename', Actual, False);
+end;
+
+procedure TTestNamingConvention.Test_OwnFunction;
+var
+  Actual: string;
+begin
+  //  Arrange...
+  FCut := TOwnFuncNamingConvention.Create(
+    FNamingConvention,
+    function(AValue: string): string
+    begin
+      Result := AValue.ToUpper;
+    end);
+
+  //  Act...
+  Actual := FCut.GenerateKeyName('AnyVariableName');
+
+  //  Assert...
+  Assert.AreEqual('ANYVARIABLENAME', Actual, False);
 end;
 
 procedure TTestNamingConvention.Test_GetterSetter;

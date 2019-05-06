@@ -5,7 +5,10 @@ interface
 {$M+}
 
 uses
-  DUnitX.TestFramework;
+  System.Generics.Collections,
+  DUnitX.TestFramework,
+  Nathan.ObjectMapping.Core,
+  Nathan.ObjectMapping.Types;
 
 type
   TOrderDetails = class
@@ -63,12 +66,43 @@ type
     InnerValue: string;
   end;
 
+
+
+
+
+  [TestFixture]
+  TTestObjectMapping = class
+  private
+    FCut: INathanObjectMappingCore<TOrder, TOrderDTO>;
+    FOrder: TOrder;
+    FDetails: TOrderDetails;
+    procedure InitOrderDummy();
+    function GetStubDict: TDictionary<string, TMappedSrcDest>;
+  public
+    [Setup]
+    procedure Setup();
+
+    [TearDown]
+    procedure TearDown();
+
+    [Test]
+    // [Ignore('Ignore this test')]
+    procedure Test_HasNoMemoryLeaks;
+
+    [Test]
+    procedure Test_First_MapCallWithEx;
+
+    [Test]
+    procedure Test_CallMap;
+  end;
+
 {$M-}
 
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils,
+  Nathan.ObjectMapping.Config;
 
 { **************************************************************************** }
 
@@ -94,5 +128,97 @@ begin
   Result := FOrderDetails.Quantity * FOrderDetails.Price;
   FInnerValue := Result.ToString;
 end;
+
+{ **************************************************************************** }
+
+{ TTestObjectMapping }
+
+procedure TTestObjectMapping.Setup();
+begin
+  FCut := nil;
+  FDetails := nil;
+  FOrder := nil;
+end;
+
+procedure TTestObjectMapping.TearDown();
+begin
+  if Assigned(FDetails) then
+    FDetails.Free;
+
+  if Assigned(FOrder) then
+    FOrder.Free;
+
+  FCut := nil;
+end;
+
+procedure TTestObjectMapping.InitOrderDummy;
+begin
+  FDetails := TOrderDetails.Create;
+  FDetails.ItemNumber := 'A123';
+  FDetails.Quantity := 2;
+  FDetails.Price := 9.95;
+
+  FOrder := TOrder.Create;
+  FOrder.OrderId := 1;
+  FOrder.CustomerName := 'Nathan Thurnreiter';
+  FOrder.OrderDetails := FDetails;
+end;
+
+procedure TTestObjectMapping.Test_HasNoMemoryLeaks;
+begin
+  //  Assert...
+  FCut := TNathanObjectMappingCore<TOrder, TOrderDTO>.Create;
+  Assert.IsNotNull(FCut);
+end;
+
+procedure TTestObjectMapping.Test_First_MapCallWithEx;
+begin
+  //  Arrange...
+  InitOrderDummy;
+  FCut := TNathanObjectMappingCore<TOrder, TOrderDTO>.Create;
+
+  //  Act...
+  Assert.WillRaise(
+    procedure
+    begin
+      FCut.Map(FOrder);
+    end,
+    ENoMappingsFoundException);
+end;
+
+function TTestObjectMapping.GetStubDict: TDictionary<string, TMappedSrcDest>;
+var
+  Config: INathanObjectMappingConfig<TOrder, TOrderDTO>;
+begin
+  Config := TNathanObjectMappingConfig<TOrder, TOrderDTO>.Create;
+  Result := Config.CreateMap;
+end;
+
+procedure TTestObjectMapping.Test_CallMap;
+var
+  Config: INathanObjectMappingConfig<TOrder, TOrderDTO>;
+  Dict: TDictionary<string, TMappedSrcDest>;
+  Actual: TOrderDTO;
+begin
+  //  Arrange...
+  InitOrderDummy;
+  Config := TNathanObjectMappingConfig<TOrder, TOrderDTO>.Create;
+  Dict := Config.CreateMap;
+  //  Dict := GetStubDict;
+  FCut := TNathanObjectMappingCore<TOrder, TOrderDTO>.Create(Dict);
+
+  //  Act...
+  Actual := FCut.Map(FOrder);
+  try
+    //  Assert...
+    Assert.IsNotNull(Actual);
+    Assert.AreEqual<Double>(19.9, TOrderDTO(Actual).Total);
+  finally
+    FreeAndNil(Actual);
+  end;
+end;
+
+initialization
+  TDUnitX.RegisterTestFixture(TTestObjectMapping, 'Frist');
 
 end.

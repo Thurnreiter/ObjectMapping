@@ -33,6 +33,12 @@ type
 
     [Test]
     procedure Test_WithOwnMapping;
+
+    [Test]
+    procedure Test_DictFromCreateMapOnlyOnce;
+
+    [Test]
+    procedure Test_RefreshDictTwoTimes;
   end;
 
 {$M-}
@@ -116,8 +122,7 @@ begin
   ActualProcValue := '';
 
   //  Act...
-  Actual := FCut.CreateMap;
-  FCut
+  Actual := FCut
     .AddMap(
       function(): TValue
       begin
@@ -126,12 +131,41 @@ begin
       procedure(AValue: TValue)
       begin
         ActualProcValue := AValue.ToString;
-      end);
+      end)
+    .CreateMap;
 
   //  Assert...
   Assert.AreEqual('', ActualProcValue);
-  Assert.AreEqual('orderid,2,customername,', GetStrings(Actual));
+  Assert.AreEqual('orderid,0,customername,', GetStrings(Actual));
   Assert.AreEqual(3, Actual.Count);
+end;
+
+procedure TTestObjectMappingConfig.Test_DictFromCreateMapOnlyOnce;
+var
+  Actual: TDictionary<string, TMappedSrcDest>;
+begin
+  Actual := FCut.CreateMap;
+  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
+  Assert.AreEqual(2, Actual.Count);
+
+  Actual := FCut.CreateMap;
+  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
+  Assert.AreEqual(2, Actual.Count);
+end;
+
+procedure TTestObjectMappingConfig.Test_RefreshDictTwoTimes;
+var
+  Actual: TDictionary<string, TMappedSrcDest>;
+begin
+  Actual := FCut.CreateMap;
+  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
+  Assert.AreEqual(2, Actual.Count);
+
+  Actual := FCut
+    .Clean
+    .CreateMap;
+  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
+  Assert.AreEqual(2, Actual.Count);
 end;
 
 initialization
