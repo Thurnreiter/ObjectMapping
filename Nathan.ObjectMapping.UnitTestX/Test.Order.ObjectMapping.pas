@@ -212,6 +212,8 @@ begin
   try
     //  Assert...
     Assert.IsNotNull(Actual);
+    Assert.AreEqual(1, Actual.OrderId);
+    Assert.AreEqual('Nathan Thurnreiter', Actual.CustomerName);
     Assert.AreEqual<Double>(19.9, TOrderDTO(Actual).Total);
   finally
     FreeAndNil(Actual);
