@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.Rtti,
   System.Generics.Collections,
+  Nathan.ObjectMapping.Config,
   Nathan.ObjectMapping.Types;
 
 {$REGION 'Info'}{
@@ -22,12 +23,14 @@ type
   //  INathanObjectMappingCore<S, D: class> = interface
   INathanObjectMappingCore<S, D> = interface
     ['{40203DC3-18C7-487D-B356-0E50784609A7}']
+    function Config(): INathanObjectMappingConfig<S, D>; overload;
+    function Config(AValue: INathanObjectMappingConfig<S, D>): INathanObjectMappingCore<S, D>; overload;
     function Map(ASource: S): D;
   end;
 
   TNathanObjectMappingCore<S, D: class> = class(TInterfacedObject, INathanObjectMappingCore<S, D>)
   strict private
-    FDict: TDictionary<string, TMappedSrcDest>;
+    FConfig: INathanObjectMappingConfig<S, D>;
 
     function CreateDestination(): D;
 
@@ -36,8 +39,11 @@ type
 
     procedure UpdateDestination(ASrc: S; ADest: D);
   public
-    constructor Create(AMappingDict: TDictionary<string, TMappedSrcDest>); overload;
+    constructor Create(); overload;
     destructor Destroy; override;
+
+    function Config(): INathanObjectMappingConfig<S, D>; overload;
+    function Config(AValue: INathanObjectMappingConfig<S, D>): INathanObjectMappingCore<S, D>; overload;
 
     function Map(ASource: S): D; experimental;
   end;
@@ -46,22 +52,15 @@ type
 
 implementation
 
-{ **************************************************************************** }
-
-{ TNathanObjectMappingCore<S, D> }
-
-constructor TNathanObjectMappingCore<S, D>.Create(AMappingDict: TDictionary<string, TMappedSrcDest>);
+constructor TNathanObjectMappingCore<S, D>.Create();
 begin
   inherited Create;
-  FDict := AMappingDict;
+  FConfig := nil;
 end;
 
 destructor TNathanObjectMappingCore<S, D>.Destroy;
 begin
-  //  Not sure when I'll release the list...
-  //  if Assigned(FDict) then
-  //    FDict.Free;
-
+  //...
   inherited;
 end;
 
@@ -113,7 +112,10 @@ begin
     mtField: Result := TRttiField(AMember).GetValue(AValueFromObject.AsObject);
     mtProperty: Result := TRttiProperty(AMember).GetValue(AValueFromObject.AsObject);
     mtMethod: Result := nil;
-    mtFuncProc: Result := nil;
+    mtFuncProc:
+      begin
+        Result := nil;
+      end
   else
     Result := nil;
   end;
@@ -134,7 +136,7 @@ end;
 
 procedure TNathanObjectMappingCore<S, D>.UpdateDestination(ASrc: S; ADest: D);
 var
-  InnerStr: string;
+  Idx: Integer;
   LValue: TValue;
   ValueFromS: TValue;
   ValueFromD: TValue;
@@ -145,20 +147,23 @@ begin
   ValueFromS := TValue.From<S>(ASrc);
   ValueFromD := TValue.From<D>(ADest);
 
-  for Item in FDict do
+  for Item in FConfig.GetMemberMap do
   begin
     MemberS := Item.Value[msdSource].MemberClass;
     MemberD := Item.Value[msdDestination].MemberClass;
 
     LValue := GetInnerValue(Item.Value[msdSource].MappingType, MemberS, ValueFromS);
-    InnerStr := LValue.ToString;
     SetInnerValue(Item.Value[msdDestination].MappingType, MemberD, ValueFromD, LValue);
   end;
+
+  for Idx := 0 to FConfig.GetUserMap.Count - 1 do
+    FConfig.GetUserMap.Items[Idx](ASrc, ADest);
 end;
 
 function TNathanObjectMappingCore<S, D>.Map(ASource: S): D;
 begin
-  if ((not Assigned(FDict)) or (FDict.Count = 0)) then
+  if ((not Assigned(FConfig))
+  or ((FConfig.GetMemberMap.Count = 0) and (FConfig.GetUserMap.Count = 0))) then
     raise ENoMappingsFoundException.Create('No mapping information found.');
 
   //  Create an empty destination object...
@@ -166,6 +171,17 @@ begin
 
   //  Update our destination class...
   UpdateDestination(ASource, Result);
+end;
+
+function TNathanObjectMappingCore<S, D>.Config: INathanObjectMappingConfig<S, D>;
+begin
+  Result := FConfig;
+end;
+
+function TNathanObjectMappingCore<S, D>.Config(AValue: INathanObjectMappingConfig<S, D>): INathanObjectMappingCore<S, D>;
+begin
+  FConfig := AValue;
+  Result := Self;
 end;
 
 end.

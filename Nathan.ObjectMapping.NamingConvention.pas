@@ -13,10 +13,16 @@ type
     function GenerateKeyName(const AValue: string): string;
   end;
 
+  /// <summary>
+  ///   Base class for all derived naming converation.
+  /// </summary>
   TNamingConvention = class(TInterfacedObject, INamingConvention)
     function GenerateKeyName(const AValue: string): string; virtual;
   end;
 
+  /// <summary>
+  ///   Base decorator class for all derived.
+  /// </summary>
   TNamingConventionDecorator = class(TNamingConvention)
   strict private
     FNamingConvention: INamingConvention;
@@ -25,22 +31,37 @@ type
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  /// <summary>
+  ///   Replaces all leading "F".
+  /// </summary>
   TPrefixFNamingConvention = class(TNamingConventionDecorator)
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  /// <summary>
+  ///   Put all in lower case letters.
+  /// </summary>
   TLowerNamingConvention = class(TNamingConventionDecorator)
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  /// <summary>
+  ///   Removes all underscores.
+  /// </summary>
   TUnderscoreNamingConvention = class(TNamingConventionDecorator)
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  /// <summary>
+  ///   Removes all leading "GET" or "SET".
+  /// </summary>
   TGetterSetterNamingConvention = class(TNamingConventionDecorator)
     function GenerateKeyName(const AValue: string): string; override;
   end;
 
+  /// <summary>
+  ///   Own function to replace.
+  /// </summary>
   TOwnFuncNamingConvention = class(TNamingConventionDecorator)
   strict private
     FOwnFunc: TFunc<string, string>;

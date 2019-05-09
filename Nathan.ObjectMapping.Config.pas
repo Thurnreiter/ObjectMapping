@@ -15,8 +15,6 @@ uses
 type
   INathanObjectMappingConfig<S, D> = interface
     ['{9D498376-8130-4E82-AA98-066CA9833685}']
-    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
-
     function Clean(): INathanObjectMappingConfig<S, D>; overload;
 
     function NamingConvention(): INamingConvention; overload;
@@ -24,6 +22,10 @@ type
     function NamingConvention(AValue: TFunc<INamingConvention>): INathanObjectMappingConfig<S, D>; overload;
 
     function CreateMap(): TDictionary<string, TMappedSrcDest>;
+    function UserMap(AMappingProc: TProc<S, D>): INathanObjectMappingConfig<S, D>;
+
+    function GetMemberMap(): TDictionary<string, TMappedSrcDest>;
+    function GetUserMap(): TList<TProc<S, D>>;
   end;
 
   TNathanObjectMappingConfig<S, D: class> = class(TInterfacedObject, INathanObjectMappingConfig<S, D>)
@@ -32,6 +34,8 @@ type
     FListOfPropNameDestination: TArray<TCoreMapDetails>;
 
     FDict: TDictionary<string, TMappedSrcDest>;
+    FUserMapList: TList<TProc<S, D>>;
+
     FNamingConvention: INamingConvention;
   private
     function GetAllProps(AInnerRttiType: TRttiType): TArray<TCoreMapDetails>;
@@ -40,15 +44,17 @@ type
     constructor Create(); overload;
     destructor Destroy; override;
 
-    function AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>; overload;
-
     function NamingConvention(): INamingConvention; overload;
     function NamingConvention(AValue: INamingConvention): INathanObjectMappingConfig<S, D>; overload;
     function NamingConvention(AValue: TFunc<INamingConvention>): INathanObjectMappingConfig<S, D>; overload;
 
     function Clean(): INathanObjectMappingConfig<S, D>; overload;
+    function UserMap(AMappingProc: TProc<S, D>): INathanObjectMappingConfig<S, D>;
 
     function CreateMap(): TDictionary<string, TMappedSrcDest>;
+
+    function GetMemberMap(): TDictionary<string, TMappedSrcDest>;
+    function GetUserMap(): TList<TProc<S, D>>;
   end;
 
 {$M-}
@@ -60,18 +66,18 @@ uses
   System.TypInfo,
   Nathan.TArrayHelper;
 
-{ TNathanObjectMappingConfig<S, D> }
-
 constructor TNathanObjectMappingConfig<S, D>.Create;
 begin
   inherited Create();
   FDict := TDictionary<string, TMappedSrcDest>.Create;
+  FUserMapList := TList<TProc<S, D>>.Create;
   FNamingConvention := nil;
 end;
 
 destructor TNathanObjectMappingConfig<S, D>.Destroy;
 begin
   FDict.Free;
+  FUserMapList.Free;
   inherited;
 end;
 
@@ -130,6 +136,7 @@ end;
 function TNathanObjectMappingConfig<S, D>.Clean: INathanObjectMappingConfig<S, D>;
 begin
   FDict.Clear;
+  FUserMapList.Clear;
   TArray.Clear<TCoreMapDetails>(FListOfPropNameSource);
   TArray.Clear<TCoreMapDetails>(FListOfPropNameDestination);
   Result := Self;
@@ -179,18 +186,20 @@ begin
   Result := FDict;
 end;
 
-function TNathanObjectMappingConfig<S, D>.AddMap(ASrc: TFunc<TValue>; ADest: TProc<TValue>): INathanObjectMappingConfig<S, D>;
-var
-  Mapped: TMappedSrcDest;
+function TNathanObjectMappingConfig<S, D>.UserMap(AMappingProc: TProc<S, D>): INathanObjectMappingConfig<S, D>;
 begin
-  Mapped[msdSource].GetFunc := ASrc;
-  Mapped[msdSource].MappingType := mtFuncProc;
-
-  Mapped[msdDestination].SetProc := ADest;
-  Mapped[msdDestination].MappingType := mtFuncProc;
-
-  FDict.AddOrSetValue(FDict.Count.ToString, Mapped);
+  FUserMapList.Add(AMappingProc);
   Result := Self;
+end;
+
+function TNathanObjectMappingConfig<S, D>.GetMemberMap: TDictionary<string, TMappedSrcDest>;
+begin
+  Result := FDict;
+end;
+
+function TNathanObjectMappingConfig<S, D>.GetUserMap: TList<TProc<S, D>>;
+begin
+  Result := FUserMapList;
 end;
 
 end.

@@ -17,8 +17,6 @@ type
     TypeOfWhat: TTypeKind;
     MappingType: TMappingType;
     MemberClass: TRttiMember;
-    GetFunc: TFunc<TValue>;
-    SetProc: TProc<TValue>;
   end;
 
   MappedSrcDest = (msdSource, msdDestination);

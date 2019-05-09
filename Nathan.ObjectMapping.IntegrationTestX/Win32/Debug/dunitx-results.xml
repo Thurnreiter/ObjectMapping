@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<test-results name="D:\Dev\GitHub\ObjectMapping\Nathan.ObjectMapping.IntegrationTestX\Win32\Debug\Nathan.ObjectMapping.IntegrationTestX.exe" total="3" errors="0" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2019-05-09" time="0.010">
+  <culture-info current-culture="en" current-uiculture="en" />
+  <test-suite type="Assembly" name="Nathan.ObjectMapping.IntegrationTestX.exe" executed="true" result="Success" success="True" time="0.010" asserts="0">
+    <results>
+        <test-suite type="Namespace" name="Test" executed="true" result="Success" success="True" time="0.009" asserts="0" >
+          <results>
+              <test-suite type="Fixture" name="Frist" executed="True" result="Success" success="True" time="0.009" >
+                <results>
+                  <test-case name="Test_HasNoMemoryLeaks" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="Test_First_MapCallWithEx" executed="True" result="Success" success="True" time="0.008" asserts="0" />
+                  <test-case name="Test_CallMap" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                </results>
+              </test-suite>
+          </results>
+        </test-suite>
+    </results>
+  </test-suite>
+</test-results>

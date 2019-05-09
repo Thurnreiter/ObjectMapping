@@ -1,34 +1,30 @@
-program Nathan.ObjectMapping.UnitTestX;
+program Nathan.ObjectMapping.IntegrationTestX;
 
 {$IFNDEF TESTINSIGHT}
-  {$APPTYPE CONSOLE}
-{$ENDIF}
-
+{$APPTYPE CONSOLE}
+{$ENDIF}{$STRONGLINKTYPES ON}
 uses
+  System.SysUtils,
+  System.IOUtils,
   {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX,
   {$ENDIF }
-  System.SysUtils,
-  System.IOUtils,
-  DUnitX.TestFramework,
   DUnitX.Loggers.Console,
   DUnitX.Loggers.Xml.NUnit,
-  Nathan.ObjectMapping.NamingConvention in '..\Nathan.ObjectMapping.NamingConvention.pas',
-  Test.NamingConvention in 'Test.NamingConvention.pas',
-  Nathan.ObjectMapping.Core in '..\Nathan.ObjectMapping.Core.pas',
-  Test.Order.ObjectMapping in 'Test.Order.ObjectMapping.pas',
+  DUnitX.TestFramework,
+  Test.Core.ObjectMapping.Order in 'Test.Core.ObjectMapping.Order.pas',
   Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas',
+  Nathan.ObjectMapping.Core in '..\Nathan.ObjectMapping.Core.pas',
+  Nathan.ObjectMapping.NamingConvention in '..\Nathan.ObjectMapping.NamingConvention.pas',
   Nathan.ObjectMapping.Types in '..\Nathan.ObjectMapping.Types.pas',
-  Test.Order.ObjectMapping.Config in 'Test.Order.ObjectMapping.Config.pas',
   Nathan.TArrayHelper in '..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
   Test.Order.Classes in '..\Test.Order.Classes.pas';
 
 var
-  Runner: ITestRunner;
-  Results: IRunResults;
-  Logger: ITestLogger;
-  NUnitLogger: ITestLogger;
-
+  runner : ITestRunner;
+  results : IRunResults;
+  logger : ITestLogger;
+  nunitLogger : ITestLogger;
 begin
   {$WARN SYMBOL_PLATFORM OFF}ReportMemoryLeaksOnShutdown := (DebugHook > 0);{$WARN SYMBOL_PLATFORM ON}
 
