@@ -11,3 +11,4 @@ __history/
 *.exe
 Nathan.ObjectMapping.UnitTestX/bin/Win32/Debug/TestInsightSettings.ini
 ObjectMapping.zip
+Nathan.ObjectMapping.IntegrationTestX/Win32/Debug/TestInsightSettings.ini
