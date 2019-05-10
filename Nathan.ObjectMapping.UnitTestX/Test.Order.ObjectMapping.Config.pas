@@ -66,6 +66,9 @@ type
     procedure Test_RefreshDictTwoTimes;
 
     [Test]
+    procedure Test_WithOwnMappingReverse;
+
+    [Test]
     procedure Test_WithOwnMappingAndTwoReferences;
   end;
 
@@ -109,11 +112,13 @@ begin
   //  Arrange...
 
   //  Act...
-  Actual := FCut.CreateMap;
+  Actual := FCut
+    .CreateMap
+    .GetMemberMap;
 
   //  Assert...
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
 end;
 
 procedure TTestObjectMappingConfig.Test_WithNamingConvention;
@@ -133,11 +138,12 @@ begin
           .Create(TPrefixFNamingConvention
           .Create(TNamingConvention.Create))));
     end)
-    .CreateMap;
+    .CreateMap
+    .GetMemberMap;
 
   //  Assert...
-  Assert.AreEqual('orderid,innervalue,customername,', GetStrings(Actual));
-  Assert.AreEqual(3, Actual.Count);
+  Assert.AreEqual('innervalue,orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(4, Actual.Count);
 end;
 
 procedure TTestObjectMappingConfig.Test_WithOwnMapping;
@@ -152,11 +158,12 @@ begin
       begin
         ADest.Total := ASrc.Total;
       end)
-    .CreateMap;
+    .CreateMap
+    .GetMemberMap;
 
   //  Assert...
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
 
   Assert.AreEqual(1, FCut.GetUserMap.Count);
 end;
@@ -165,28 +172,62 @@ procedure TTestObjectMappingConfig.Test_DictFromCreateMapOnlyOnce;
 var
   Actual: TDictionary<string, TMappedSrcDest>;
 begin
-  Actual := FCut.CreateMap;
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+  Actual := FCut
+    .CreateMap
+    .GetMemberMap;
 
-  Actual := FCut.CreateMap;
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
+
+  Actual := FCut
+    .CreateMap
+    .GetMemberMap;
+
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
 end;
 
 procedure TTestObjectMappingConfig.Test_RefreshDictTwoTimes;
 var
   Actual: TDictionary<string, TMappedSrcDest>;
 begin
-  Actual := FCut.CreateMap;
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+  Actual := FCut
+    .CreateMap
+    .GetMemberMap;
+
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
 
   Actual := FCut
     .Clean
-    .CreateMap;
-  Assert.AreEqual('orderid,customername,', GetStrings(Actual));
-  Assert.AreEqual(2, Actual.Count);
+    .CreateMap
+    .GetMemberMap;
+
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
+end;
+
+procedure TTestObjectMappingConfig.Test_WithOwnMappingReverse;
+var
+  Actual: TDictionary<string, TMappedSrcDest>;
+begin
+  //  Arrange...
+  //  Act...
+  Actual := FCut
+    .UserMapReverse(
+      procedure(ADest: TOrderDTO; ASrc: TOrder)
+      begin
+        ASrc.Extension := ADest.InnerValue;
+      end)
+    .CreateMap
+    .GetMemberMap;
+
+  //  Assert...
+  Assert.AreEqual('orderid,total,customername,', GetStrings(Actual));
+  Assert.AreEqual(3, Actual.Count);
+
+  Assert.AreEqual(0, FCut.GetUserMap.Count);
+  Assert.AreEqual(1, FCut.GetUserMapReverse.Count);
 end;
 
 function TTestObjectMappingConfig.GetDummyProc(const ACapValue: Integer): TFunc<Integer>;

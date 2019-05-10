@@ -9,7 +9,7 @@ uses
 {$M+}
 
 type
-  TMappingType = (mtUnknown, mtField, mtProperty, mtMethod, mtFuncProc);
+  TMappingType = (mtUnknown, mtField, mtProperty, mtMethod);
 
   TCoreMapDetails = record
     RttiTypeName: string;

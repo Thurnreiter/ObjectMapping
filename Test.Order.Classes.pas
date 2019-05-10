@@ -64,8 +64,11 @@ type
   TOrderDummyFactory = class
     class var Order: TOrder;
     class var Details: TOrderDetails;
+    class var OrderDTO: TOrderDTO;
 
+    class procedure Init;
     class procedure InitOrderDummy;
+    class procedure InitOrderDtoDummy;
 
     class procedure Release;
   end;
@@ -94,6 +97,9 @@ end;
 
 function TOrder.Total: Double;
 begin
+  if (not Assigned(FOrderDetails)) then
+    Exit(0);
+
   Result := FOrderDetails.Quantity * FOrderDetails.Price;
   FInnerValue := Result.ToString;
 end;
@@ -111,6 +117,23 @@ begin
   Order.OrderId := 1;
   Order.CustomerName := 'Nathan Thurnreiter';
   Order.OrderDetails := Details;
+  Order.Extension := 'Chanan';
+end;
+
+class procedure TOrderDummyFactory.InitOrderDtoDummy;
+begin
+  OrderDTO := TOrderDTO.Create;
+  OrderDTO.OrderId := 2;
+  OrderDTO.CustomerName := 'Peter Miller';
+  OrderDTO.Total := 47.11;
+  OrderDTO.InnerValue := 'Chanan';
+end;
+
+class procedure TOrderDummyFactory.Init;
+begin
+  Details := nil;
+  Order := nil;
+  OrderDTO := nil;
 end;
 
 class procedure TOrderDummyFactory.Release;
@@ -120,6 +143,9 @@ begin
 
   if Assigned(Order) then
     Order.Free;
+
+  if Assigned(OrderDTO) then
+    OrderDTO.Free;
 end;
 
 end.
