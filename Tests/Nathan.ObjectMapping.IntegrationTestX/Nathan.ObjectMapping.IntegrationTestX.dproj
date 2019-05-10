@@ -40,8 +40,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_ExeOutput>.\bin\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
@@ -88,12 +88,12 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Test.Core.ObjectMapping.Order.pas"/>
-        <DCCReference Include="..\Nathan.ObjectMapping.Config.pas"/>
-        <DCCReference Include="..\Nathan.ObjectMapping.Core.pas"/>
-        <DCCReference Include="..\Nathan.ObjectMapping.NamingConvention.pas"/>
-        <DCCReference Include="..\Nathan.ObjectMapping.Types.pas"/>
-        <DCCReference Include="..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas"/>
         <DCCReference Include="..\Test.Order.Classes.pas"/>
+        <DCCReference Include="..\..\Nathan.ObjectMapping.Config.pas"/>
+        <DCCReference Include="..\..\Nathan.ObjectMapping.Core.pas"/>
+        <DCCReference Include="..\..\Nathan.ObjectMapping.NamingConvention.pas"/>
+        <DCCReference Include="..\..\Nathan.ObjectMapping.Types.pas"/>
+        <DCCReference Include="..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

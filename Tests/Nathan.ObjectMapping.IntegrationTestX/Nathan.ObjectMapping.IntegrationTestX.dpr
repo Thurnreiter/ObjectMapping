@@ -13,12 +13,12 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   DUnitX.TestFramework,
   Test.Core.ObjectMapping.Order in 'Test.Core.ObjectMapping.Order.pas',
-  Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas',
-  Nathan.ObjectMapping.Core in '..\Nathan.ObjectMapping.Core.pas',
-  Nathan.ObjectMapping.NamingConvention in '..\Nathan.ObjectMapping.NamingConvention.pas',
-  Nathan.ObjectMapping.Types in '..\Nathan.ObjectMapping.Types.pas',
-  Nathan.TArrayHelper in '..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
-  Test.Order.Classes in '..\Test.Order.Classes.pas';
+  Test.Order.Classes in '..\Test.Order.Classes.pas',
+  Nathan.ObjectMapping.Config in '..\..\Nathan.ObjectMapping.Config.pas',
+  Nathan.ObjectMapping.Core in '..\..\Nathan.ObjectMapping.Core.pas',
+  Nathan.ObjectMapping.NamingConvention in '..\..\Nathan.ObjectMapping.NamingConvention.pas',
+  Nathan.ObjectMapping.Types in '..\..\Nathan.ObjectMapping.Types.pas',
+  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas';
 
 var
   runner : ITestRunner;

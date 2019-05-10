@@ -13,15 +13,15 @@ uses
   DUnitX.TestFramework,
   DUnitX.Loggers.Console,
   DUnitX.Loggers.Xml.NUnit,
-  Nathan.ObjectMapping.NamingConvention in '..\Nathan.ObjectMapping.NamingConvention.pas',
   Test.NamingConvention in 'Test.NamingConvention.pas',
-  Nathan.ObjectMapping.Core in '..\Nathan.ObjectMapping.Core.pas',
   Test.Order.ObjectMapping in 'Test.Order.ObjectMapping.pas',
-  Nathan.ObjectMapping.Config in '..\Nathan.ObjectMapping.Config.pas',
-  Nathan.ObjectMapping.Types in '..\Nathan.ObjectMapping.Types.pas',
   Test.Order.ObjectMapping.Config in 'Test.Order.ObjectMapping.Config.pas',
-  Nathan.TArrayHelper in '..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
-  Test.Order.Classes in '..\Test.Order.Classes.pas';
+  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
+  Test.Order.Classes in '..\Test.Order.Classes.pas',
+  Nathan.ObjectMapping.Config in '..\..\Nathan.ObjectMapping.Config.pas',
+  Nathan.ObjectMapping.Core in '..\..\Nathan.ObjectMapping.Core.pas',
+  Nathan.ObjectMapping.NamingConvention in '..\..\Nathan.ObjectMapping.NamingConvention.pas',
+  Nathan.ObjectMapping.Types in '..\..\Nathan.ObjectMapping.Types.pas';
 
 var
   Runner: ITestRunner;

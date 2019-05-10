@@ -3,10 +3,10 @@
         <ProjectGuid>{BA2BBA62-A9C9-4720-932F-78FCCE82AA72}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj">
+        <Projects Include="Tests\Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj">
+        <Projects Include="Tests\Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -18,22 +18,22 @@
         </BorlandProject>
     </ProjectExtensions>
     <Target Name="Nathan_ObjectMapping_UnitTestX">
-        <MSBuild Projects="Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj"/>
     </Target>
     <Target Name="Nathan_ObjectMapping_UnitTestX:Clean">
-        <MSBuild Projects="Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj" Targets="Clean"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj" Targets="Clean"/>
     </Target>
     <Target Name="Nathan_ObjectMapping_UnitTestX:Make">
-        <MSBuild Projects="Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj" Targets="Make"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.UnitTestX\Nathan.ObjectMapping.UnitTestX.dproj" Targets="Make"/>
     </Target>
     <Target Name="Nathan_ObjectMapping_IntegrationTestX">
-        <MSBuild Projects="Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj"/>
     </Target>
     <Target Name="Nathan_ObjectMapping_IntegrationTestX:Clean">
-        <MSBuild Projects="Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj" Targets="Clean"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj" Targets="Clean"/>
     </Target>
     <Target Name="Nathan_ObjectMapping_IntegrationTestX:Make">
-        <MSBuild Projects="Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj" Targets="Make"/>
+        <MSBuild Projects="Tests\Nathan.ObjectMapping.IntegrationTestX\Nathan.ObjectMapping.IntegrationTestX.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
         <CallTarget Targets="Nathan_ObjectMapping_UnitTestX;Nathan_ObjectMapping_IntegrationTestX"/>
