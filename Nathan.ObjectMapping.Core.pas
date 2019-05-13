@@ -3,6 +3,7 @@ unit Nathan.ObjectMapping.Core;
 interface
 
 uses
+  System.IOUtils,
   System.SysUtils,
   System.Rtti,
   System.Generics.Collections,
@@ -29,11 +30,11 @@ type
     function MapReverse(ADestination: D): S; overload;
   end;
 
-  TNathanObjectMappingCore<S, D: class> = class(TInterfacedObject, INathanObjectMappingCore<S, D>)
+  TNathanObjectMappingCore<S, D> = class(TInterfacedObject, INathanObjectMappingCore<S, D>)
   strict private
     FConfig: INathanObjectMappingConfig<S, D>;
 
-    function Creator(RType: TRttiType): TValue;
+    function Creator(AType: TRttiType): TValue;
     function CreateDestination(): D;
     function CreateSource(): S;
 
@@ -82,36 +83,70 @@ begin
   Result := Self;
 end;
 
-function TNathanObjectMappingCore<S, D>.Creator(RType: TRttiType): TValue;
+function TNathanObjectMappingCore<S, D>.Creator(AType: TRttiType): TValue;
 var
-  RMethCreate: TRttiMethod;
-  RInstanceType: TRttiInstanceType;
-  RValue: TValue;
+  LObjImplement: TObject;
+  LMethCreate: TRttiMethod;
+  LInstanceType: TRttiInstanceType;
+  LValue: TValue;
   Args: array of TValue;
+  LObjType: TRttiType;
 begin
   //  Example how to create the destination object...
   Args := ['Internal value for properties'];
-  for RMethCreate in RType.GetMethods do
+  if (AType.TypeKind = tkClass) then
   begin
-    if (RMethCreate.IsConstructor) then
+    LInstanceType := AType.AsInstance;
+    for LMethCreate in AType.GetMethods do
     begin
-      RInstanceType := RType.AsInstance;
-      if (Length(RMethCreate.GetParameters) = 0) then
+      if (LMethCreate.IsConstructor) then
       begin
-        //  Constructor parameters, here are emtpy []...
-        RValue := RMethCreate.Invoke(RInstanceType.MetaclassType, []);
+        if (Length(LMethCreate.GetParameters) = 0) then
+        begin
+          //  Constructor parameters, here are emtpy []...
+          LValue := LMethCreate.Invoke(LInstanceType.MetaclassType, []);
 
-        //  v := t.GetMethod('Create').Invoke(t.AsInstance.MetaclassType,[]);
-        Exit(RValue);
-      end
-      else
-      if (Length(RMethCreate.GetParameters) = Length(Args)) then
-      begin
-        //  With constructor parameters, here are a dummy...
-        RValue := RMethCreate.Invoke(RInstanceType.MetaclassType, Args);
-        Exit(RValue);
+          //  v := t.GetMethod('Create').Invoke(t.AsInstance.MetaclassType,[]);
+          Exit(LValue);
+        end
+        else
+        if (Length(LMethCreate.GetParameters) = Length(Args)) then
+        begin
+          //  With constructor parameters, here are a dummy...
+          LValue := LMethCreate.Invoke(LInstanceType.MetaclassType, Args);
+          Exit(LValue);
+        end;
       end;
     end;
+  end
+  else
+  if (AType.TypeKind = tkInterface) then
+  begin
+    //  https://stackoverflow.com/questions/39584234/how-to-obtain-rtti-from-an-interface-reference-in-delphi?rq=1
+    //  https://www.thedelphigeek.com/2012/10/automagically-creating-object-fields.html
+    //  https://www.delphipraxis.net/195026-custom-constructor-di-bei-factory-basierter-objekterstellung-2.html
+    //  http://qaru.site/questions/2180093/unable-to-invoke-method-declare-in-class-implement-generic-interface-method
+    //  https://stackoverflow.com/questions/6278381/delphi-rtti-for-interfaces-in-a-generic-context
+    //  https://stackoverflow.com/questions/10600186/why-does-findtype-fail-to-get-rtti-when-gettype-succeeds
+    //  https://stackanswers.net/questions/how-to-obtain-rtti-from-an-interface-reference-in-delphi
+    //  https://stackoverflow.com/questions/8158035/creating-an-interface-implementer-instance-at-runtime
+
+    for LObjType in TRTTIContext.Create.GetTypes do
+    begin
+      if (LObjType.Name = 'T' + AType.name.Substring(1)) then
+      begin
+        LInstanceType := LObjType.AsInstance;
+
+        //LInstanceType := AType.AsInstance;
+        LObjImplement := LInstanceType.GetMethod('Create').Invoke(LInstanceType.MetaclassType, []).AsObject;
+        if (not LObjImplement.GetInterface(LInstanceType.GetImplementedInterfaces[0].GUID, Result)) then
+          LObjImplement.Free();
+
+        Exit(Result);
+      end;
+    end;
+
+    //  Otherwise Address.QueryInterface()
   end;
 end;
 
@@ -225,11 +260,33 @@ begin
 end;
 
 function TNathanObjectMappingCore<S, D>.Map(ASource: S): D;
+//var
+//  LObjImplement: TObject;
+//  LInstanceType: TRttiInstanceType;
+//  LObjType: TRttiType;
 begin
   ValidateStarting;
 
   //  Create an empty destination object...
   Result := CreateDestination;
+
+//    for LObjType in TRTTIContext.Create.GetTypes do
+//    begin
+//    //  if (LObjType.Name = 'IAddressDto') then
+//    //  if (LObjType.Name = 'TAddressDto') then
+//
+//      if (LObjType.Name = 'T' + 'AddressDto') then
+//      begin
+//        LInstanceType := LObjType.AsInstance;
+//
+//        //LInstanceType := AType.AsInstance;
+//        LObjImplement := LInstanceType.GetMethod('Create').Invoke(LInstanceType.MetaclassType, []).AsObject;
+//        if (not LObjImplement.GetInterface(LInstanceType.GetImplementedInterfaces[0].GUID, Result)) then
+//          LObjImplement.Free();
+//
+////        Exit(Result);
+//      end;
+//    end;
 
   //  Update our destination class...
   UpdateCreation(ASource, Result);

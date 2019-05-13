@@ -52,7 +52,7 @@
         <UsingDelphiRTL>true</UsingDelphiRTL>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
-        <DCC_UnitSearchPath>$(DUnitX);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>$(DUnitX);..\..;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>Nathan_ObjectMapping_IntegrationTestX</SanitizedProjectName>
         <VerInfo_Locale>2055</VerInfo_Locale>
     </PropertyGroup>
@@ -89,11 +89,9 @@
         </DelphiCompile>
         <DCCReference Include="Test.Core.ObjectMapping.Order.pas"/>
         <DCCReference Include="..\Test.Order.Classes.pas"/>
-        <DCCReference Include="..\..\Nathan.ObjectMapping.Config.pas"/>
-        <DCCReference Include="..\..\Nathan.ObjectMapping.Core.pas"/>
-        <DCCReference Include="..\..\Nathan.ObjectMapping.NamingConvention.pas"/>
-        <DCCReference Include="..\..\Nathan.ObjectMapping.Types.pas"/>
         <DCCReference Include="..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas"/>
+        <DCCReference Include="..\Test.Address.Classes.pas"/>
+        <DCCReference Include="Test.Core.ObjectMapping.Address.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -140,7 +138,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win32\Debug\Nathan.ObjectMapping.IntegrationTestX.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="bin\Win32\Debug\Nathan.ObjectMapping.IntegrationTestX.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Nathan_ObjectMapping_IntegrationTestX.exe</RemoteName>
                         <Overwrite>true</Overwrite>

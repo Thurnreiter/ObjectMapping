@@ -31,7 +31,8 @@ type
     function GetUserMapReverse(): TList<TProc<D, S>>;
   end;
 
-  TNathanObjectMappingConfig<S, D: class> = class(TInterfacedObject, INathanObjectMappingConfig<S, D>)
+//  TNathanObjectMappingConfig<S, D: class> = class(TInterfacedObject, INathanObjectMappingConfig<S, D>)
+  TNathanObjectMappingConfig<S, D> = class(TInterfacedObject, INathanObjectMappingConfig<S, D>)
   strict private
     FListOfPropNameSource: TArray<TCoreMapDetails>;
     FListOfPropNameDestination: TArray<TCoreMapDetails>;
@@ -162,9 +163,6 @@ begin
 
   for IdxD := Low(ADest) to High(ADest) do
   begin
-if ADest[IdxD].Name.Contains('Total') then
-  Mapped[msdDestination] := ADest[IdxD];
-
     for IdxS := Low(ASrc) to High(ASrc) do
     begin
       if (ASrc[IdxS].TypeOfWhat = ADest[IdxD].TypeOfWhat)

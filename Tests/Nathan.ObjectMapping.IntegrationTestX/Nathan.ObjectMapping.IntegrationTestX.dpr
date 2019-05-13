@@ -14,11 +14,9 @@ uses
   DUnitX.TestFramework,
   Test.Core.ObjectMapping.Order in 'Test.Core.ObjectMapping.Order.pas',
   Test.Order.Classes in '..\Test.Order.Classes.pas',
-  Nathan.ObjectMapping.Config in '..\..\Nathan.ObjectMapping.Config.pas',
-  Nathan.ObjectMapping.Core in '..\..\Nathan.ObjectMapping.Core.pas',
-  Nathan.ObjectMapping.NamingConvention in '..\..\Nathan.ObjectMapping.NamingConvention.pas',
-  Nathan.ObjectMapping.Types in '..\..\Nathan.ObjectMapping.Types.pas',
-  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas';
+  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
+  Test.Address.Classes in '..\Test.Address.Classes.pas',
+  Test.Core.ObjectMapping.Address in 'Test.Core.ObjectMapping.Address.pas';
 
 var
   runner : ITestRunner;
