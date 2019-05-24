@@ -14,7 +14,6 @@ uses
   DUnitX.TestFramework,
   Test.Core.ObjectMapping.Order in 'Test.Core.ObjectMapping.Order.pas',
   Test.Order.Classes in '..\Test.Order.Classes.pas',
-  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
   Test.Address.Classes in '..\Test.Address.Classes.pas',
   Test.Core.ObjectMapping.Address in 'Test.Core.ObjectMapping.Address.pas';
 

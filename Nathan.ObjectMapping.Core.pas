@@ -131,6 +131,8 @@ begin
     //  https://stackanswers.net/questions/how-to-obtain-rtti-from-an-interface-reference-in-delphi
     //  https://stackoverflow.com/questions/8158035/creating-an-interface-implementer-instance-at-runtime
 
+    //  https://github.com/VSoftTechnologies/Delphi-Mocks/blob/master/Delphi.Mocks.Proxy.pas search to FVirtualInterface
+
     for LObjType in TRTTIContext.Create.GetTypes do
     begin
       if (LObjType.Name = 'T' + AType.name.Substring(1)) then

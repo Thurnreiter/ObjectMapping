@@ -16,12 +16,12 @@ uses
   Test.NamingConvention in 'Test.NamingConvention.pas',
   Test.Order.ObjectMapping in 'Test.Order.ObjectMapping.pas',
   Test.Order.ObjectMapping.Config in 'Test.Order.ObjectMapping.Config.pas',
-  Nathan.TArrayHelper in '..\..\..\GeneralStuff\Thurnreiter.Lib\Nathan.TArrayHelper.pas',
   Test.Order.Classes in '..\Test.Order.Classes.pas',
   Nathan.ObjectMapping.Config in '..\..\Nathan.ObjectMapping.Config.pas',
   Nathan.ObjectMapping.Core in '..\..\Nathan.ObjectMapping.Core.pas',
   Nathan.ObjectMapping.NamingConvention in '..\..\Nathan.ObjectMapping.NamingConvention.pas',
-  Nathan.ObjectMapping.Types in '..\..\Nathan.ObjectMapping.Types.pas';
+  Nathan.ObjectMapping.Types in '..\..\Nathan.ObjectMapping.Types.pas',
+  Nathan.TArrayHelper in '..\..\..\Thurnreiter.Lib\Nathan.TArrayHelper.pas';
 
 var
   Runner: ITestRunner;
